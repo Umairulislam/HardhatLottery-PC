@@ -1,6 +1,11 @@
+# Hardhat
 artifacts
 cache
-
+coverage
+deployments
 node_modules
+coverage.json
+typechain
 
+# ENV
 .env

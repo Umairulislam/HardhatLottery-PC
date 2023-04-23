@@ -14,11 +14,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 error Raffle__NotEnoughETHEntered();
 error Raffle__TransferFailed();
 error Raffle__NotOpen();
-error Raffle__UpkeepNotNeeded(
-    uint256 currentBalance,
-    uint256 numPlayers,
-    uint256 raffleState
-);
+error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
 
 /** @title A sample Raffle contract
  *  @author Umair ul islam
@@ -27,7 +23,7 @@ error Raffle__UpkeepNotNeeded(
  *
  */
 
-abstract contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
+contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     /* Types Declaration */
     enum RaffleState {
         OPEN,
@@ -98,11 +94,7 @@ abstract contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
      */
     function checkUpkeep(
         bytes memory /* checkData */
-    )
-        public
-        override
-        returns (bool upkeepNeeded, bytes memory /* performData */)
-    {
+    ) public override returns (bool upkeepNeeded, bytes memory /* performData */) {
         bool isOpen = (RaffleState.OPEN == s_raffleState);
         bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
         bool hasPlayers = (s_players.length > 0);
@@ -168,15 +160,25 @@ abstract contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         return NUM_WORDS;
     }
 
-    function getNumerOfPlayers() public view returns (uint256) {
+    function getNumberOfPlayers() public view returns (uint256) {
         return s_players.length;
     }
 
-    function getLatestTimestamp() public view returns (uint256) {
+    function getLatestTimeStamp() public view returns (uint256) {
         return s_lastTimeStamp;
     }
 
     function getRequestConfirmations() public pure returns (uint256) {
         return REQUEST_CONFIRMATIONS;
     }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval;
+    }
 }
+
+// 1.Get our SubId Chainlink VRF & Fund
+// 2.Deploy our Contract using the SubId
+// 3.REgister the Contract with Chainlink VRF and it's SubID
+// 4.Register the Contract with Chainlink Keepers
+// 5.Run staging tests
